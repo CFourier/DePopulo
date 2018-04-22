@@ -2,4 +2,8 @@ QT += widgets
 QT += core
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    fenetreprincipale.cpp
+
+HEADERS += \
+    fenetreprincipale.h

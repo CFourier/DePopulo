@@ -1,4 +1,4 @@
-/*            De_populo
+/* De_populo
  * Projet de simulation de population
  *
  * Projet par : Virgile SOLT
@@ -14,7 +14,9 @@
 #include <QApplication>
 #include <QtDebug>
 
+#include "debat.h"
 #include "fenetreprincipale.h"
+#include "solution.h"
 
 int main(int argc, char *argv[])
 {

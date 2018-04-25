@@ -3,7 +3,11 @@ QT += core
 
 SOURCES += \
     main.cpp \
-    fenetreprincipale.cpp
+    fenetreprincipale.cpp \
+    debat.cpp \
+    solution.cpp
 
 HEADERS += \
-    fenetreprincipale.h
+    fenetreprincipale.h \
+    debat.h \
+    solution.h

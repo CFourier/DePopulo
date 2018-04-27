@@ -14,9 +14,11 @@
 #include <QApplication>
 #include <QtDebug>
 
+#include "citoyen.h"
 #include "debat.h"
 #include "fenetreprincipale.h"
 #include "solution.h"
+#include "territoire.h"
 
 int main(int argc, char *argv[])
 {

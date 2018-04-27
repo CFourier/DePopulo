@@ -5,9 +5,13 @@ SOURCES += \
     main.cpp \
     fenetreprincipale.cpp \
     debat.cpp \
-    solution.cpp
+    solution.cpp \
+    territoire.cpp \
+    citoyen.cpp
 
 HEADERS += \
     fenetreprincipale.h \
     debat.h \
-    solution.h
+    solution.h \
+    territoire.h \
+    citoyen.h

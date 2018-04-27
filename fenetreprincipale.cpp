@@ -25,7 +25,7 @@ FenetrePrincipale::FenetrePrincipale()
     layoutPrincipal->addWidget(boutonSolution);
     layoutPrincipal->addWidget(boutonQuitter);
 
-    setFixedSize(800, 600);
+    setFixedSize(400, 300);
     setWindowTitle("De populo");
     setLayout(layoutPrincipal);
 

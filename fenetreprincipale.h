@@ -12,6 +12,8 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
+#include <QGridLayout>
+#include <QImage>
 
 #include "debat.h"
 
@@ -27,19 +29,16 @@ class FenetrePrincipale : public QWidget
 
     public slots :
 
-    void insereSolution();
-    void afficheListeSolutions();
 
     protected :
 
-    QVBoxLayout *layoutPrincipal;
+    QGridLayout *layoutPrincipal;
     QPushButton *boutonQuitter;
-
-    QLineEdit *solution;
-    QPushButton *boutonSolution;
-    QLabel *listeSolutions;
-
-    Debat *debat;
+    QPushButton *boutonGenerer;
+    QPushButton *boutonCharger;
+    QPushButton *boutonOptions;
+    QPixmap *imageMenu;
+    QLabel *imageMenu_label;
 };
 
 #endif // FENETREPRINCIPALE_H

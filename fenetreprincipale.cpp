@@ -6,50 +6,37 @@
 
 #include <QApplication>
 #include <QWidget>
+#include <QImage>
 
 #include "debat.h"
 #include "fenetreprincipale.h"
 
 FenetrePrincipale::FenetrePrincipale()
 {
-    debat = new Debat("Debat par défaut");
+    imageMenu = new QPixmap(800, 300);
+    QRgb couleur_rgb;
+    couleur_rgb = qRgb(0, 60, 255);
+    QColor couleur(couleur_rgb);
+    imageMenu->fill(couleur);
+    imageMenu_label = new QLabel;
+    imageMenu_label->setPixmap(*imageMenu);
 
-    listeSolutions = new QLabel("Liste des solutions");
-    solution = new QLineEdit;
-    boutonSolution = new QPushButton("Ajouter solution");
     boutonQuitter = new QPushButton("Quitter");
-    layoutPrincipal = new QVBoxLayout;
+    boutonGenerer = new QPushButton("Générer une nouvelle population");
+    boutonCharger = new QPushButton("Charger une population");
+    boutonOptions = new QPushButton("Options");
 
-    layoutPrincipal->addWidget(listeSolutions);
-    layoutPrincipal->addWidget(solution);
-    layoutPrincipal->addWidget(boutonSolution);
-    layoutPrincipal->addWidget(boutonQuitter);
+    layoutPrincipal = new QGridLayout;
 
-    setFixedSize(400, 300);
+    layoutPrincipal->addWidget(imageMenu_label, 0, 0, 1, 2);
+    layoutPrincipal->addWidget(boutonGenerer, 1, 0, 1, 2);
+    layoutPrincipal->addWidget(boutonCharger, 2, 0, 1, 2);
+    layoutPrincipal->addWidget(boutonOptions, 3, 0);
+    layoutPrincipal->addWidget(boutonQuitter, 3, 1);
+
+    setFixedSize(800, 500);
     setWindowTitle("De populo");
     setLayout(layoutPrincipal);
 
     QObject::connect(boutonQuitter, SIGNAL(clicked()), qApp, SLOT(quit()));
-    QObject::connect(boutonSolution, SIGNAL(clicked()), this, SLOT(insereSolution()));
-    QObject::connect(boutonSolution, SIGNAL(clicked()), this, SLOT(afficheListeSolutions()));
-}
-
-void FenetrePrincipale::insereSolution()
-{
-    debat->ajouterSolution(solution->text());
-}
-
-void FenetrePrincipale::afficheListeSolutions()
-{
-    QVector<QString> qVectorSolutions = debat->getListeSolutions();
-
-    QString qStringSolutions;
-
-    for (QVector<QString>::iterator it = qVectorSolutions.begin(); it != qVectorSolutions.end(); it++)
-    {
-        qStringSolutions += it;
-        qStringSolutions += "\n";
-    }
-
-    listeSolutions->setText(qStringSolutions);
 }

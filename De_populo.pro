@@ -7,11 +7,13 @@ SOURCES += \
     debat.cpp \
     solution.cpp \
     territoire.cpp \
-    citoyen.cpp
+    citoyen.cpp \
+    layoutmenu.cpp
 
 HEADERS += \
     fenetreprincipale.h \
     debat.h \
     solution.h \
     territoire.h \
-    citoyen.h
+    citoyen.h \
+    layoutmenu.h

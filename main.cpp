@@ -17,6 +17,7 @@
 #include "citoyen.h"
 #include "debat.h"
 #include "fenetreprincipale.h"
+#include "layoutmenu.h"
 #include "solution.h"
 #include "territoire.h"
 

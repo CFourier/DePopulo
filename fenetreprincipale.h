@@ -7,6 +7,9 @@
 #ifndef FENETREPRINCIPALE_H
 #define FENETREPRINCIPALE_H
 
+#define LARGEUR_FENETRE 800
+#define HAUTEUR_FENETRE 500
+
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -15,30 +18,18 @@
 #include <QGridLayout>
 #include <QImage>
 
-#include "debat.h"
+#include "layoutmenu.h"
 
 class FenetrePrincipale : public QWidget
 {
-    private :
-
-    Q_OBJECT
-
     public :
 
     FenetrePrincipale();
-
-    public slots :
-
+    void chargerMenu();
 
     protected :
 
-    QGridLayout *layoutPrincipal;
-    QPushButton *boutonQuitter;
-    QPushButton *boutonGenerer;
-    QPushButton *boutonCharger;
-    QPushButton *boutonOptions;
-    QPixmap *imageMenu;
-    QLabel *imageMenu_label;
+    LayoutMenu *layoutMenu;
 };
 
 #endif // FENETREPRINCIPALE_H

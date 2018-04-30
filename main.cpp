@@ -18,6 +18,7 @@
 #include "debat.h"
 #include "fenetreprincipale.h"
 #include "layoutmenu.h"
+#include "opinion.h"
 #include "solution.h"
 #include "territoire.h"
 

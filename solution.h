@@ -21,4 +21,7 @@ class Solution
     QString *nomSolution;
 };
 
+bool operator==(Solution solution1, Solution solution2);
+bool operator!=(Solution solution1, Solution solution2);
+
 #endif // SOLUTION_H

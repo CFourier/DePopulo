@@ -17,7 +17,7 @@ LayoutMenu::LayoutMenu()
     imageMenu_label->setPixmap(*imageMenu);
 
     boutonQuitter = new QPushButton("Quitter");
-    boutonGenerer = new QPushButton("Générer une nouvelle population");
+    boutonGenerer = new QPushButton("Créer une nouvelle population");
     boutonCharger = new QPushButton("Charger une population");
     boutonOptions = new QPushButton("Options");
 

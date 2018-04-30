@@ -18,6 +18,7 @@ class Territoire
 
     protected :
 
+    QString *nomTerritoire;
     QVector<Territoire> territoiresInclus;
     QVector<Citoyen> population;
 };

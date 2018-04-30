@@ -8,7 +8,8 @@ SOURCES += \
     solution.cpp \
     territoire.cpp \
     citoyen.cpp \
-    layoutmenu.cpp
+    layoutmenu.cpp \
+    opinion.cpp
 
 HEADERS += \
     fenetreprincipale.h \
@@ -16,4 +17,5 @@ HEADERS += \
     solution.h \
     territoire.h \
     citoyen.h \
-    layoutmenu.h
+    layoutmenu.h \
+    opinion.h

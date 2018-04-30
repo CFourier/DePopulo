@@ -5,6 +5,16 @@
 
 #include "solution.h"
 
+bool operator==(Solution solution1, Solution solution2)
+{
+    return(solution1.getNomSolution() == solution2.getNomSolution());
+}
+
+bool operator!=(Solution solution1, Solution solution2)
+{
+    return(solution1.getNomSolution() != solution2.getNomSolution());
+}
+
 Solution::Solution()
 {
     nomSolution = new QString("Solution par défaut");

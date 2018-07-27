@@ -1,7 +1,8 @@
 /* fenetreprincipale.cpp :
- *  Fichier source de la classe FenetrePrincipale, déterminant les caractéristiques de la fenêtre principale créée par le programme.
- *
- * Créé le 22/04/2018
+ *  Fichier source de la classe FenetrePrincipale, déterminant les caractéristiques de la fenêtre principale créée par le programme ;
+ *  Créé le 22/04/2018.
+ *  Modifié le 13/05/2018 :
+ *  Il est désormais la classe-mère des différents types de fenêtres à afficher.
  */
 
 #include <QApplication>
@@ -9,19 +10,14 @@
 
 #include "fenetreprincipale.h"
 #include "layoutmenu.h"
+#include "population.h"
 
 FenetrePrincipale::FenetrePrincipale()
 {
-    layoutMenu = new LayoutMenu;
 
-    chargerMenu();
 }
 
-void FenetrePrincipale::chargerMenu()
+int FenetrePrincipale::getLayoutAffiche()
 {
-    setFixedSize(LARGEUR_FENETRE, HAUTEUR_FENETRE);
-    setWindowTitle("De populo");
-    setLayout(layoutMenu);
-
-    QObject::connect(layoutMenu->boutonQuitter, SIGNAL(clicked()), qApp, SLOT(quit()));
+    return layoutAffiche;
 }

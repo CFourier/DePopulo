@@ -3,24 +3,28 @@
  *  Créé le 27/04/2018.
  */
 
-#ifndef ETAT_H
-#define ETAT_H
+#ifndef TERRITOIRE_H
+#define TERRITOIRE_H
 
 #include <QVector>
-
-#include "citoyen.h"
 
 class Territoire
 {
     public :
 
     Territoire();
+    Territoire(const QString &p_nomTerritoire);
+    void inclureTerritoire(const Territoire &territoire);
+    void integrerAuTerritoire(Territoire &territoire);
+    void integrerAuTerritoire(const QString &p_nomTerritoire, Territoire Etat);
 
     protected :
 
     QString *nomTerritoire;
-    QVector<Territoire> territoiresInclus;
-    QVector<Citoyen> population;
+
+    private :
+
+    QVector<Territoire> *territoiresInclus;
 };
 
-#endif // ETAT_H
+#endif // TERRITOIRE_H

@@ -27,6 +27,7 @@ class LayoutMenu : public QGridLayout
     QPixmap *imageMenu;
     QLabel *imageMenu_label;
 
+    friend FenetreMenu();
 };
 
 #endif // LAYOUTMENU_H

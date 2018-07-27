@@ -9,3 +9,8 @@ Citoyen::Citoyen()
 {
 
 }
+
+void Citoyen::creerOpinion(const Debat &debat, const Solution &solution, const int convictionValeur)
+{
+    opinions->push_back(Opinion(debat, solution, convictionValeur));
+}

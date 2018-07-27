@@ -19,11 +19,11 @@ Opinion::Opinion(const Debat &p_debat)
     convictionValeur = 0;
 }
 
-Opinion::Opinion(const Debat &p_debat, Solution &p_conviction, int &p_convictionValeur)
+Opinion::Opinion(const Debat &p_debat, const Solution &p_conviction, const int &p_convictionValeur)
 {
     debat = &p_debat;
-    conviction = &p_conviction;
-    convictionValeur = &p_convictionValeur;
+    *conviction = p_conviction;
+    *convictionValeur = p_convictionValeur;
 }
 
 void Opinion::changerAvis(Solution &solutionGagnant, const int gainConviction)

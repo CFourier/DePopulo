@@ -17,7 +17,7 @@ class Opinion
 
     Opinion();
     Opinion(const Debat &p_debat);
-    Opinion(const Debat &p_debat, Solution &p_conviction, int &p_convictionValeur);
+    Opinion(const Debat &p_debat, const Solution &p_conviction, const int &p_convictionValeur);
     void changerAvis(Solution &solutionGagnant, const int gainConviction);
 
     protected :

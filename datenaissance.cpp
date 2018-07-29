@@ -4,14 +4,19 @@
  */
 
 #include <QtGlobal>
+#include <QDate>
 
 #include "datenaissance.h"
 
 DateNaissance::DateNaissance()
-{
-    int min = 1920, max = 2018;
+{   
+    int dateActuelle = currentDate().year();
+
+    int min = dateActuelle-120, max = dateActuelle;
 
     *annee = (qrand() % (max - min + 1)) + min; //Génération d'une année aléatoire
+
+    ///Il faudra demander la pyramide des âges de la population ; il y a actuellement autant de chances d'avoir 120 ans que d'en avoir 30.
 
     min = 1, max = 12;
 
@@ -43,36 +48,42 @@ DateNaissance::DateNaissance()
 
 DateNaissance::DateNaissance(const int &p_annee, const int &p_mois, const int &p_jour)
 {
-    if (*mois > 12)
-        *mois = 12;
+    if (*mois < 1)
+    {
+        *mois *= -1;
+        *mois += 1;
+    }
 
-    else if (*mois < 1)
-        *mois = 1;
+    if (*mois > 12)
+        *mois %= 12;
 
     if (*jour < 1)
-        *jour = 1;
+    {
+        *jour *= -1;
+        *jour += 1;
+    }
 
     else if (*jour > 28)
     {
         if (*mois == 1 || *mois == 3 || *mois == 5 || *mois == 7 || *mois == 8 || *mois == 10 || *mois == 12)
         {
             if (*jour > 31)
-                *jour = 31;
+                *jour %= 31;
         }
 
         else if (*mois == 2)
         {
             if (*annee % 4 == 0)
-                *jour = 29;
+                *jour %= 29;
 
             else
-                *jour = 28;
+                *jour %= 28;
         }
 
         else
         {
             if (*jour > 30)
-                *jour = 30;
+                *jour %= 30;
         }
     }
 

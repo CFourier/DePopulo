@@ -12,7 +12,8 @@ SOURCES += \
     identite.cpp \
     datenaissance.cpp \
     ville.cpp \
-    population.cpp
+    population.cpp \
+    dialoguegenerer.cpp
 
 HEADERS += \
     fenetreprincipale.h \
@@ -24,4 +25,5 @@ HEADERS += \
     identite.h \
     datenaissance.h \
     ville.h \
-    population.h
+    population.h \
+    dialoguegenerer.h

@@ -17,13 +17,9 @@
 #include "citoyen.h"
 #include "datenaissance.h"
 #include "debat.h"
-#include "fenetregenerer.h"
-#include "fenetremenu.h"
 #include "fenetreprincipale.h"
 #include "population.h"
 #include "identite.h"
-#include "layoutgenerer.h"
-#include "layoutmenu.h"
 #include "opinion.h"
 #include "solution.h"
 #include "territoire.h"
@@ -35,8 +31,8 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    FenetreMenu fenetreMenu;
-    fenetreMenu.show();
+    FenetrePrincipale fenetre;
+    fenetre.show();
 
     return app.exec();
 }

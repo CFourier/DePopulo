@@ -6,7 +6,9 @@
 #ifndef DATENAISSANCE_H
 #define DATENAISSANCE_H
 
-class DateNaissance
+#include <QDate>
+
+class DateNaissance : public QDate
 {
     public :
 

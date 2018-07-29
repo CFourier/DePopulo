@@ -3,6 +3,7 @@
  *  Créé le 22/04/2018.
  *  Modifié le 13/05/2018 :
  *  Il est désormais la classe-mère des différents types de fenêtres à afficher.
+ *  Retour à sa fonction de départ le 27/07/2018.
  */
 
 #ifndef FENETREPRINCIPALE_H
@@ -11,33 +12,51 @@
 #define LARGEUR_FENETRE 800
 #define HAUTEUR_FENETRE 500
 
-#include <QWidget>
+#include <QMainWindow>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
 #include <QGridLayout>
 #include <QImage>
+#include <QWidget>
+#include <QMenu>
+#include <QStackedWidget>
+#include <QTableWidget>
 
-#include "layoutgenerer.h"
-#include "layoutmenu.h"
 #include "population.h"
 
-enum
+class FenetrePrincipale : public QMainWindow
 {
-    MENU, GENERER, CHARGER, OPTIONS
-};
+    Q_OBJECT
 
-class FenetrePrincipale : public QWidget
-{
     public :
 
     FenetrePrincipale();
-    int getLayoutAffiche();
+
+    public slots :
+
+    void afficherOpinions();
+    void afficherPartis();
+    void afficherElections();
+    void creerNouvellePopulation();
+    void chargerPopulation();
+    void enregistrer();
+    void enregistrerSous();
 
     protected :
 
-    int layoutAffiche;
+    QWidget *zoneCentrale;
+    QVBoxLayout *layoutCentral;
+    QVBoxLayout *layoutOpinions;
+    QVBoxLayout *layoutPartis;
+    QVBoxLayout *layoutElections;
+    QStackedWidget *onglets;
+    QWidget *ongletOpinions;
+    QWidget *ongletPartis;
+    QWidget *ongletElections;
+
+    QTableWidget *tableauOpinions;
 };
 
 #endif // FENETREPRINCIPALE_H

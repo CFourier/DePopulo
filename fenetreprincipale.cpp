@@ -11,6 +11,10 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QSqlTableModel>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QtDebug>
 
 #include "dialoguegenerer.h"
 #include "fenetreprincipale.h"
@@ -18,6 +22,8 @@
 
 FenetrePrincipale::FenetrePrincipale()
 {
+    fichier = new QString("NULL");
+
     setWindowTitle("De populo");
     setFixedSize(LARGEUR_FENETRE, HAUTEUR_FENETRE);
 
@@ -59,9 +65,10 @@ FenetrePrincipale::FenetrePrincipale()
     layoutCentral->addWidget(onglets);
     zoneCentrale->setLayout(layoutCentral);
 
-    tableauOpinions = new QTableWidget;
-    tableauOpinions->setRowCount(2);
-    tableauOpinions->setColumnCount(2);
+    tableauOpinions = new QTableView;
+    modeleTableauOpinions = new QSqlTableModel; //Se documenter sur les sql
+    tableauOpinions->setModel(modeleTableauOpinions);
+   // tableauOpinions->show();
     layoutOpinions->addWidget(tableauOpinions);
 
     QObject::connect(actionOpinions, SIGNAL(triggered()), this, SLOT(afficherOpinions()));
@@ -89,21 +96,62 @@ void FenetrePrincipale::afficherElections()
 }
 
 void FenetrePrincipale::creerNouvellePopulation()
-{
+{    
+    if (*fichier != "NULL")
+    {
+        int confirmation = QMessageBox::warning(this, "Nouvelle population", "Attention ! Toutes les modifications non enregistrées seront perdues ! Souhaitez-vous tout de même continuer ?", QMessageBox::Yes | QMessageBox::No);
+
+        if (confirmation == QMessageBox::Yes)
+        {
+            DialogueGenerer *dialogueGenerer;
+            dialogueGenerer = new DialogueGenerer;
+            dialogueGenerer->show();
+        }
+    }
+
+    else
+    {
+        DialogueGenerer *dialogueGenerer;
+        dialogueGenerer = new DialogueGenerer;
+        dialogueGenerer->show();
+    }
 
 }
 
 void FenetrePrincipale::chargerPopulation()
 {
+    if (*fichier != "NULL")
+    {
+        int confirmation = QMessageBox::warning(this, "Charger une population", "Attention ! Toutes les modifications non enregistrées seront perdues ! Souhaitez-vous tout de même continuer ?", QMessageBox::Yes | QMessageBox::No);
 
+        if (confirmation == QMessageBox::Yes)
+        {
+            *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
+        }
+    }
+
+    else
+    {
+        *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
+    }
+
+    //Il faut aussi créer une classe pour manipuler les fichiers, car cela ne fait qu'ouvrir la boîte de dialogue
 }
 
 void FenetrePrincipale::enregistrer()
 {
+    if (*fichier == "NULL")
+    {
+        *fichier = QFileDialog::getSaveFileName(this, "Enregistrer sous", QString(), "Populations (*.populo)");
+        //cf. void FenetrePrincipale::enregistrerSous()
+    }
 
+    //Cf. remarque en commentaire de void FenetrePrincipale::enregistrerSous()
 }
 
 void FenetrePrincipale::enregistrerSous()
 {
+    *fichier = QFileDialog::getSaveFileName(this, "Enregistrer sous", QString(), "Populations (*.populo)");
 
+    //Ça ne fait qu'afficher la fenêtre, évidemment ! Il ne faut pas oublier de créer une classe pour manipuler les fichiers.
 }

@@ -6,7 +6,12 @@
 #include "fenetreprincipale.h"
 #include "population.h"
 
-Population::Population()
+Population::Population(QString &p_nomPopulation)
+{
+    Etat = new Territoire("Etat");
+}
+
+Population::Population(QString &p_nomPopulation, QString &paquetsOpinions)
 {
     Etat = new Territoire("Etat");
 }

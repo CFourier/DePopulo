@@ -12,7 +12,8 @@ class Population
 {
     public :
 
-    Population();
+    Population(QString &p_nomPopulation);
+    Population(QString &p_nomPopulation, QString &paquetsOpinions);
     void ajouterTerritoireEtat(const Territoire &territoire);
 
     protected :

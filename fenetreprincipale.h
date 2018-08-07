@@ -23,6 +23,8 @@
 #include <QMenu>
 #include <QStackedWidget>
 #include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QSqlTableModel>
 
 #include "population.h"
 
@@ -46,6 +48,8 @@ class FenetrePrincipale : public QMainWindow
 
     protected :
 
+    QString *fichier;
+
     QWidget *zoneCentrale;
     QVBoxLayout *layoutCentral;
     QVBoxLayout *layoutOpinions;
@@ -56,7 +60,8 @@ class FenetrePrincipale : public QMainWindow
     QWidget *ongletPartis;
     QWidget *ongletElections;
 
-    QTableWidget *tableauOpinions;
+    QTableView *tableauOpinions;
+    QSqlTableModel *modeleTableauOpinions;
 };
 
 #endif // FENETREPRINCIPALE_H

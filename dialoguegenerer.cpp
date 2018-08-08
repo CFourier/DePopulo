@@ -5,10 +5,12 @@
 
 #include "dialoguegenerer.h"
 #include "population.h"
+#include "fenetreprincipale.h"
 
-DialogueGenerer::DialogueGenerer(QWidget *parent)
+DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
 {
-    fenetreParente = new QWidget(parent);
+    fenetreParente = new FenetrePrincipale;
+    fenetreParente = parent;
 
     setWindowTitle("Nouvelle population");
 
@@ -69,11 +71,15 @@ void DialogueGenerer::creerPopulation()
 
     else
     {
+         Population *population;
+
         if (*paquetOpinionsChoisi == "" || *paquetOpinionsChoisi == "NULL")
-            Population population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text());
+            population = new Population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text());
 
         else
-            Population population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text(), *paquetOpinionsChoisi);
+            population = new Population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text(), *paquetOpinionsChoisi);
+
+        fenetreParente->setPopulation(*population);
 
         this->close();
     }

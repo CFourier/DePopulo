@@ -8,8 +8,6 @@
 
 #include <QVector>
 
-#include "citoyen.h"
-
 class Territoire
 {
     public :
@@ -26,7 +24,6 @@ class Territoire
     QString *nomTerritoire;
     QVector<Territoire> *territoiresInclus;
     int *taillePopulation;
-    QVector<Citoyen> *population;
 };
 
 #endif // TERRITOIRE_H

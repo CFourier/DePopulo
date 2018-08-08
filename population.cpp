@@ -10,6 +10,16 @@
 #include "fenetreprincipale.h"
 #include "population.h"
 
+Population::Population()
+{
+
+}
+
+Population::Population(QString *fichierPopulo)
+{
+
+}
+
 Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers)
 {
     Etat = new Territoire("Etat");

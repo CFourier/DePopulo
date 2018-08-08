@@ -9,6 +9,7 @@
 #include <QString>
 
 #include "datenaissance.h"
+#include "territoire.h"
 
 class Identite
 {
@@ -19,6 +20,7 @@ class Identite
     protected :
 
     const DateNaissance *dateNaissance;
+    Territoire *domicile;
     const bool *estMasculin;
 };
 

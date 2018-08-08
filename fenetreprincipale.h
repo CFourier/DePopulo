@@ -36,6 +36,7 @@ class FenetrePrincipale : public QMainWindow
     public :
 
     FenetrePrincipale();
+    void setPopulation(const Population &p_population);
 
     public slots :
 
@@ -44,7 +45,6 @@ class FenetrePrincipale : public QMainWindow
     void afficherElections();
     void creerNouvellePopulation();
     void chargerPopulation();
-    void enregistrer();
 
     protected :
 
@@ -62,6 +62,8 @@ class FenetrePrincipale : public QMainWindow
 
     QTableView *tableauOpinions;
     QSqlTableModel *modeleTableauOpinions;
+
+    Population *population;
 };
 
 #endif // FENETREPRINCIPALE_H

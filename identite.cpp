@@ -9,4 +9,5 @@ Identite::Identite()
 {
     dateNaissance = new DateNaissance();
     estMasculin = new bool(qrand() % (1));
+    domicile = new Territoire;
 }

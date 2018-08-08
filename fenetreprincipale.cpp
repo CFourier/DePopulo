@@ -22,6 +22,8 @@
 
 FenetrePrincipale::FenetrePrincipale()
 {
+    population = new Population();
+
     fichier = new QString("NULL");
 
     setWindowTitle("De populo");
@@ -33,14 +35,11 @@ FenetrePrincipale::FenetrePrincipale()
     QMenu *menuFichier = menuBar()->addMenu("Fichier");
     QAction *actionNouvellePopulation = menuFichier->addAction("Nouvelle population");
     QAction *actionChargerPopulation = menuFichier->addAction("Charger une population");
-    QAction *actionEnregistrer = menuFichier->addAction("Enregistrer");
     QAction *actionQuitter = menuFichier->addAction("Quitter");
 
     QObject::connect(actionQuitter, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     QToolBar *barreDOutils = addToolBar("Gestion de population");
-    barreDOutils->addAction(actionEnregistrer);
-    barreDOutils->addSeparator();
     QAction *actionOpinions = barreDOutils->addAction("Opinions");
     QAction *actionPartis = barreDOutils->addAction("Partis");
     QAction *actionElections = barreDOutils->addAction("Élections");
@@ -67,7 +66,7 @@ FenetrePrincipale::FenetrePrincipale()
     tableauOpinions = new QTableView;
     modeleTableauOpinions = new QSqlTableModel; //Se documenter sur les sql
     tableauOpinions->setModel(modeleTableauOpinions);
-   // tableauOpinions->show();
+    tableauOpinions->show();
     layoutOpinions->addWidget(tableauOpinions);
 
     QObject::connect(actionOpinions, SIGNAL(triggered()), this, SLOT(afficherOpinions()));
@@ -75,7 +74,11 @@ FenetrePrincipale::FenetrePrincipale()
     QObject::connect(actionElections, SIGNAL(triggered()), this, SLOT(afficherElections()));
     QObject::connect(actionNouvellePopulation, SIGNAL(triggered()), this, SLOT(creerNouvellePopulation()));
     QObject::connect(actionChargerPopulation, SIGNAL(triggered()), this, SLOT(chargerPopulation()));
-    QObject::connect(actionEnregistrer, SIGNAL(triggered()), this, SLOT(enregistrer()));
+}
+
+void FenetrePrincipale::setPopulation(const Population &p_population)
+{
+    *population = p_population;
 }
 
 void FenetrePrincipale::afficherOpinions()
@@ -102,7 +105,7 @@ void FenetrePrincipale::creerNouvellePopulation()
         if (confirmation == QMessageBox::Yes)
         {
             DialogueGenerer *dialogueGenerer;
-            dialogueGenerer = new DialogueGenerer;
+            dialogueGenerer = new DialogueGenerer(this);
             dialogueGenerer->show();
         }
     }
@@ -110,7 +113,7 @@ void FenetrePrincipale::creerNouvellePopulation()
     else
     {
         DialogueGenerer *dialogueGenerer;
-        dialogueGenerer = new DialogueGenerer;
+        dialogueGenerer = new DialogueGenerer(this);
         dialogueGenerer->show();
     }
 
@@ -125,18 +128,19 @@ void FenetrePrincipale::chargerPopulation()
         if (confirmation == QMessageBox::Yes)
         {
             *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
+
+            Population *population;
+            population = new Population(fichier);
         }
     }
 
     else
     {
         *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
+
+        Population *population;
+        population = new Population(fichier);
     }
 
-    //Il faut aussi créer une classe pour manipuler les fichiers, car cela ne fait qu'ouvrir la boîte de dialogue
-}
-
-void FenetrePrincipale::enregistrer()
-{
-    //Il ne faut pas oublier de créer une classe pour manipuler les fichiers.
+    setPopulation(*population);
 }

@@ -11,7 +11,6 @@ Territoire::Territoire()
     nomTerritoire = new QString("Territoire par défaut");
     territoiresInclus = new QVector<Territoire>;
     taillePopulation = new int(0);
-    population = new QVector<Citoyen>;
 }
 
 Territoire::Territoire(const QString &p_nomTerritoire)
@@ -19,7 +18,6 @@ Territoire::Territoire(const QString &p_nomTerritoire)
     nomTerritoire = new QString(p_nomTerritoire);
     territoiresInclus = new QVector<Territoire>;
     taillePopulation = new int(0);
-    population = new QVector<Citoyen>;
 
     //Préparer l'onglet/la fenêtre (en appelant un objet d'une classe à créer) qui permettra de déterminer les choix concernant chaque territoire subordonné
 }
@@ -29,7 +27,6 @@ Territoire::Territoire(const QString &p_nomTerritoire, const int &p_taillePopula
     nomTerritoire = new QString(p_nomTerritoire);
     territoiresInclus = new QVector<Territoire>;
     taillePopulation = new int(p_taillePopulation);
-    population = new QVector<Citoyen>;
 }
 
 void Territoire::inclureTerritoire(const Territoire &territoire)

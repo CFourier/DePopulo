@@ -9,13 +9,15 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
+#include <fenetreprincipale.h>
+
 class DialogueGenerer : public QWidget
 {
     Q_OBJECT
 
     public :
 
-    DialogueGenerer(QWidget *parent = 0);
+    DialogueGenerer(FenetrePrincipale *parent);
 
     public slots :
 
@@ -25,7 +27,7 @@ class DialogueGenerer : public QWidget
 
     protected :
 
-    QWidget *fenetreParente;
+    FenetrePrincipale *fenetreParente;
 
     QFormLayout *layoutFormulaire;
     QVBoxLayout *layoutPrincipal;

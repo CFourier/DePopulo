@@ -8,12 +8,15 @@
 
 #include <QVector>
 
+#include "citoyen.h"
+
 class Territoire
 {
     public :
 
     Territoire();
     Territoire(const QString &p_nomTerritoire);
+    Territoire(const QString &p_nomTerritoire, const int &p_taillePopulation);
     void inclureTerritoire(const Territoire &territoire);
     void integrerAuTerritoire(Territoire &territoire);
     void integrerAuTerritoire(const QString &p_nomTerritoire, Territoire Etat);
@@ -21,10 +24,9 @@ class Territoire
     protected :
 
     QString *nomTerritoire;
-
-    private :
-
     QVector<Territoire> *territoiresInclus;
+    int *taillePopulation;
+    QVector<Citoyen> *population;
 };
 
 #endif // TERRITOIRE_H

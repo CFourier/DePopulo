@@ -6,19 +6,23 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
+#include <QDir>
+
 #include "territoire.h"
 
 class Population
 {
     public :
 
-    Population(QString &p_nomPopulation);
-    Population(QString &p_nomPopulation, QString &paquetsOpinions);
+    Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers);
+    Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions);
     void ajouterTerritoireEtat(const Territoire &territoire);
 
     protected :
 
     Territoire *Etat;
+    QString *nomPopulation;
+    QString *emplacementFichiers;
 };
 
 #endif // POPULATION_H

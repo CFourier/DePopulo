@@ -21,8 +21,11 @@ class DialogueGenerer : public QWidget
 
     void choisirPaquetOpinions();
     void choisirEmplacementFichiers();
+    void creerPopulation();
 
     protected :
+
+    QWidget *fenetreParente;
 
     QFormLayout *layoutFormulaire;
     QVBoxLayout *layoutPrincipal;
@@ -33,6 +36,7 @@ class DialogueGenerer : public QWidget
     QLineEdit *cheminFichiersPopulation;
     QPushButton *parcourirCheminFichiersPopulation;
     QLabel *emplacementFichiers;
+    QPushButton *boutonOK;
 
     QString *paquetOpinionsChoisi;
     QString *emplacementFichiersChoisi;

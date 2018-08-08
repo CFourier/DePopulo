@@ -1,11 +1,15 @@
 #include <QFileDialog>
 #include <QtDebug>
 #include <QCoreApplication>
+#include <QMessageBox>
 
 #include "dialoguegenerer.h"
+#include "population.h"
 
 DialogueGenerer::DialogueGenerer(QWidget *parent)
 {
+    fenetreParente = new QWidget(parent);
+
     setWindowTitle("Nouvelle population");
 
     nomPopulation = new QLineEdit;
@@ -20,6 +24,8 @@ DialogueGenerer::DialogueGenerer(QWidget *parent)
     parcourirCheminFichiersPopulation = new QPushButton("Parcourir");
     emplacementFichiersChoisi = new QString("NULL");
 
+    boutonOK = new QPushButton("OK");
+
     layoutCheminFichiers = new QHBoxLayout;
     layoutCheminFichiers->addWidget(emplacementFichiers);
     layoutCheminFichiers->addWidget(cheminFichiersPopulation);
@@ -29,11 +35,13 @@ DialogueGenerer::DialogueGenerer(QWidget *parent)
     layoutPrincipal->addLayout(layoutFormulaire);
     layoutPrincipal->addWidget(paquetOpinions);
     layoutPrincipal->addLayout(layoutCheminFichiers);
+    layoutPrincipal->addWidget(boutonOK);
 
     setLayout(layoutPrincipal);
 
     QObject::connect(paquetOpinions, SIGNAL(clicked()), this, SLOT(choisirPaquetOpinions()));
     QObject::connect(parcourirCheminFichiersPopulation, SIGNAL(clicked()), this, SLOT(choisirEmplacementFichiers()));
+    QObject::connect(boutonOK, SIGNAL(clicked()), this, SLOT(creerPopulation()));
 }
 
 void DialogueGenerer::choisirPaquetOpinions()
@@ -50,4 +58,23 @@ void DialogueGenerer::choisirEmplacementFichiers()
 
     if (*emplacementFichiersChoisi != "" && *emplacementFichiersChoisi != "NULL")
         cheminFichiersPopulation->setText(*emplacementFichiersChoisi);
+}
+
+void DialogueGenerer::creerPopulation()
+{
+    if (nomPopulation->text().isEmpty())
+    {
+        QMessageBox::critical(this, "Erreur", "Vous n'avez pas précisé de nom pour la population");
+    }
+
+    else
+    {
+        if (*paquetOpinionsChoisi == "" || *paquetOpinionsChoisi == "NULL")
+            Population population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text());
+
+        else
+            Population population(fenetreParente, nomPopulation->text(), cheminFichiersPopulation->text(), *paquetOpinionsChoisi);
+
+        this->close();
+    }
 }

@@ -12,7 +12,6 @@ SOURCES += \
     opinion.cpp \
     identite.cpp \
     datenaissance.cpp \
-    ville.cpp \
     population.cpp \
     dialoguegenerer.cpp
 
@@ -25,6 +24,5 @@ HEADERS += \
     opinion.h \
     identite.h \
     datenaissance.h \
-    ville.h \
     population.h \
     dialoguegenerer.h

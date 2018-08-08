@@ -25,6 +25,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QSqlTableModel>
+#include <QDir>
 
 #include "population.h"
 
@@ -44,7 +45,6 @@ class FenetrePrincipale : public QMainWindow
     void creerNouvellePopulation();
     void chargerPopulation();
     void enregistrer();
-    void enregistrerSous();
 
     protected :
 

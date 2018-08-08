@@ -34,7 +34,6 @@ FenetrePrincipale::FenetrePrincipale()
     QAction *actionNouvellePopulation = menuFichier->addAction("Nouvelle population");
     QAction *actionChargerPopulation = menuFichier->addAction("Charger une population");
     QAction *actionEnregistrer = menuFichier->addAction("Enregistrer");
-    QAction *actionEnregistrerSous = menuFichier->addAction("Enregistrer sous");
     QAction *actionQuitter = menuFichier->addAction("Quitter");
 
     QObject::connect(actionQuitter, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -77,7 +76,6 @@ FenetrePrincipale::FenetrePrincipale()
     QObject::connect(actionNouvellePopulation, SIGNAL(triggered()), this, SLOT(creerNouvellePopulation()));
     QObject::connect(actionChargerPopulation, SIGNAL(triggered()), this, SLOT(chargerPopulation()));
     QObject::connect(actionEnregistrer, SIGNAL(triggered()), this, SLOT(enregistrer()));
-    QObject::connect(actionEnregistrerSous, SIGNAL(triggered()), this, SLOT(enregistrerSous()));
 }
 
 void FenetrePrincipale::afficherOpinions()
@@ -140,18 +138,5 @@ void FenetrePrincipale::chargerPopulation()
 
 void FenetrePrincipale::enregistrer()
 {
-    if (*fichier == "NULL")
-    {
-        *fichier = QFileDialog::getSaveFileName(this, "Enregistrer sous", QString(), "Populations (*.populo)");
-        //cf. void FenetrePrincipale::enregistrerSous()
-    }
-
-    //Cf. remarque en commentaire de void FenetrePrincipale::enregistrerSous()
-}
-
-void FenetrePrincipale::enregistrerSous()
-{
-    *fichier = QFileDialog::getSaveFileName(this, "Enregistrer sous", QString(), "Populations (*.populo)");
-
-    //Ça ne fait qu'afficher la fenêtre, évidemment ! Il ne faut pas oublier de créer une classe pour manipuler les fichiers.
+    //Il ne faut pas oublier de créer une classe pour manipuler les fichiers.
 }

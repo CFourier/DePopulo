@@ -9,7 +9,6 @@
 
 DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
 {
-    fenetreParente = new FenetrePrincipale;
     fenetreParente = parent;
 
     setWindowTitle("Nouvelle population");

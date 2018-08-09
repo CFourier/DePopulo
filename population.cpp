@@ -31,6 +31,8 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
 
     try
     {
+        //On vérifie si le dossier à créer (dans lequel seront contenus les fichiers relatifs à la population) existe déjà (ainsi que des variantes du type "nomPopulation (1)", "nomPopulation (2)", etc. Sinon, on continue.
+
         bool emplacementExisteDeja;
         QString emplacementTest = *emplacementFichiers;
 
@@ -47,10 +49,13 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
                 throw QString ("Erreur 1 : le dossier " + *nomDossier + " existe déjà. Veuillez le renommer, le déplacer ou le supprimer avant de réessayer.");
         }
 
+        //On crée le dossier dans lequel seront contenus les fichiers relatifs à la population
+
         bool emplacementEstCree = QDir(*emplacementFichiers).mkpath(*nomDossier);
 
         if (emplacementEstCree == false)
             throw QString("Erreur 2 : le dossier " + *nomDossier + " n'a pas pu être créé.");
+
     }
     catch (const QString &erreur)
     {
@@ -68,4 +73,11 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
 void Population::ajouterTerritoireEtat(const Territoire &territoire)
 {
     Etat->inclureTerritoire(territoire);
+}
+
+Population::~Population()
+{
+    delete Etat;
+    delete nomPopulation;
+    delete emplacementFichiers;
 }

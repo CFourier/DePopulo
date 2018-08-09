@@ -18,6 +18,7 @@ class Population
     Population(QString *fichierPopulo); //Pour charger une population
     Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers); //Pour créer une population
     Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions); //Pour créer une population
+    ~Population();
     void ajouterTerritoireEtat(const Territoire &territoire);
 
     protected :

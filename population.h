@@ -15,7 +15,7 @@ class Population
     public :
 
     Population();
-    Population(QString *fichierPopulo); //Pour charger une population
+    Population(QWidget *fenetreParente, QString *p_fichierPopulo); //Pour charger une population
     Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers); //Pour créer une population
     Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions); //Pour créer une population
     ~Population();
@@ -26,6 +26,8 @@ class Population
     Territoire *Etat;
     QString *nomPopulation;
     QString *emplacementFichiers;
+
+    QFile *fichierPopulation;
 };
 
 #endif // POPULATION_H

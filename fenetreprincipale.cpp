@@ -130,7 +130,7 @@ void FenetrePrincipale::chargerPopulation()
             *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
 
             Population *population;
-            population = new Population(fichier);
+            population = new Population(this, fichier);
         }
     }
 
@@ -139,7 +139,7 @@ void FenetrePrincipale::chargerPopulation()
         *fichier = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Populations (*.populo)");
 
         Population *population;
-        population = new Population(fichier);
+        population = new Population(this, fichier);
     }
 
     setPopulation(*population);

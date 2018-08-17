@@ -6,7 +6,7 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
-#include <QDir>
+#include <QFile>
 
 #include "territoire.h"
 
@@ -28,6 +28,7 @@ class Population
     QString *emplacementFichiers;
 
     QFile *fichierPopulation;
+    QFile *fichierOpinions;
 };
 
 #endif // POPULATION_H

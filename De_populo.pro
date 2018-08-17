@@ -13,7 +13,8 @@ SOURCES += \
     identite.cpp \
     datenaissance.cpp \
     population.cpp \
-    dialoguegenerer.cpp
+    dialoguegenerer.cpp \
+    chercherinfofichier.cpp
 
 HEADERS += \
     fenetreprincipale.h \
@@ -25,4 +26,5 @@ HEADERS += \
     identite.h \
     datenaissance.h \
     population.h \
-    dialoguegenerer.h
+    dialoguegenerer.h \
+    chercherinfofichier.h

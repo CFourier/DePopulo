@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QtDebug>
 
+#include "chercherinfofichier.h"
 #include "fenetreprincipale.h"
 #include "population.h"
 
@@ -18,6 +19,7 @@ Population::Population()
     *emplacementFichiers = QDir::currentPath();
 
     fichierPopulation = new QFile("population.populo");
+    fichierOpinions = new QFile("population.populopack");
 }
 
 Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
@@ -26,53 +28,34 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
     {
         fichierPopulation = new QFile(*p_fichierPopulo);
         if (!fichierPopulation->exists())
-            throw QString("Erreur 3 : le fichier " + fichierPopulation->fileName() + " n'existe pas.");
+            throw QString("Erreur 8 : le fichier " + fichierPopulation->fileName() + " n'existe pas.");
         if (!fichierPopulation->open(QIODevice::ReadWrite | QIODevice::Text))
-            throw QString("Erreur 4 : le fichier " + fichierPopulation->fileName() + " n'a pas pu être ouvert.");
+            throw QString("Erreur 9 : le fichier " + fichierPopulation->fileName() + " n'a pas pu être ouvert.");
 
         QTextStream lectureFichier(fichierPopulation);
         QString lignesPopulo = lectureFichier.readLine();
         lignesPopulo = lectureFichier.readLine();
 
-        bool asterisquesAbsents = false;
-        int i = 0;
-        while (asterisquesAbsents == false)
-        {
-            QChar asterisqueOuNon = lignesPopulo.at(i);
+        //On recherche le nom de la population
 
-            if (asterisqueOuNon != "*")
-                asterisquesAbsents = true;
+        nomPopulation = new QString;
+        *nomPopulation = chercherNomPopulation(fenetreParente, fichierPopulation->fileName());
+        if (*nomPopulation == "")
+            throw QString("Erreur 10 : le nom de la population n'a pas pu être trouvé dans le fichier " + fichierPopulation->fileName());
 
-            else
-                i++;
+        qDebug() << *nomPopulation;
 
-            if (i == lignesPopulo.size())
-                throw QString("Erreur 5 : le fichier " + fichierPopulation->fileName() + " est corrompu !");
-        }
+        //On recherche le paquet d'opinions
 
-        lignesPopulo.remove(0, i+14); //i+14, car on enlève aussi la mention " Population : "
-
-        asterisquesAbsents = false;
-        i = lignesPopulo.size() - 1;
-        while (asterisquesAbsents == false)
-        {
-            QChar asterisqueOuNon = lignesPopulo.at(i);
-
-            if (asterisqueOuNon != "*")
-                asterisquesAbsents = true;
-
-            else
-                i--;
-
-            if (i == 0)
-                throw QString("Erreur 6 : le fichier " + fichierPopulation->fileName() + " est corrompu !");
-        }
-
-        lignesPopulo.chop(lignesPopulo.size() - i);
-        nomPopulation = new QString(lignesPopulo);
-
-
-
+        QString nomFichierOpinions = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Paquet d'opinions : ");
+        if (nomFichierOpinions == "")
+            throw QString("Erreur 10 : le nom du paquet d'opinions n'a pas pu être trouvé dans le fichier " + fichierPopulation->fileName());
+        fichierOpinions = new QFile(nomFichierOpinions);
+        qDebug() << fichierOpinions->fileName();
+        if (!fichierOpinions->exists())
+            throw QString("Erreur 8 : le fichier " + fichierOpinions->fileName() + " n'existe pas.");
+        if (!fichierOpinions->open(QIODevice::ReadWrite | QIODevice::Text))
+            throw QString("Erreur 9 : le fichier " + fichierOpinions->fileName() + " n'a pas pu être ouvert.");
 
         Etat = new Territoire;
         emplacementFichiers = new QString;

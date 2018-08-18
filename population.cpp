@@ -41,21 +41,25 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
         nomPopulation = new QString;
         *nomPopulation = chercherNomPopulation(fenetreParente, fichierPopulation->fileName());
         if (*nomPopulation == "")
-            throw QString("Erreur 10 : le nom de la population n'a pas pu être trouvé dans le fichier " + fichierPopulation->fileName());
-
-        qDebug() << *nomPopulation;
+            throw bool(true);
 
         //On recherche le paquet d'opinions
 
         QString nomFichierOpinions = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Paquet d'opinions : ");
         if (nomFichierOpinions == "")
-            throw QString("Erreur 10 : le nom du paquet d'opinions n'a pas pu être trouvé dans le fichier " + fichierPopulation->fileName());
+            throw bool(true);
         fichierOpinions = new QFile(nomFichierOpinions);
-        qDebug() << fichierOpinions->fileName();
         if (!fichierOpinions->exists())
             throw QString("Erreur 8 : le fichier " + fichierOpinions->fileName() + " n'existe pas.");
         if (!fichierOpinions->open(QIODevice::ReadWrite | QIODevice::Text))
             throw QString("Erreur 9 : le fichier " + fichierOpinions->fileName() + " n'a pas pu être ouvert.");
+
+        //On recherche la taille de la population
+
+        QString taillePopulation = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Citoyens simulés : ");
+        if (nomFichierOpinions == "")
+            throw bool(true);
+        qDebug() << taillePopulation;
 
         Etat = new Territoire;
         emplacementFichiers = new QString;
@@ -63,6 +67,10 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
     catch (const QString &erreur)
     {
         QMessageBox::critical(fenetreParente, "Erreur", erreur);
+    }
+    catch (const bool &erreur)
+    {
+
     }
 }
 

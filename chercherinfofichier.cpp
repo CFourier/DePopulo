@@ -12,95 +12,109 @@
 
 QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrefixe)
 {
-    QFile fichier;
-    fichier.setFileName(cheminAbsolu);
-    if (!fichier.exists())
+    try
     {
-        QMessageBox::critical(fenetreParente, "Erreur", "Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
-        return "";
+        QFile fichier;
+        fichier.setFileName(cheminAbsolu);
+        if (!fichier.exists())
+        {
+            QMessageBox::critical(fenetreParente, "Erreur", "Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
+            return "";
+        }
+        if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
+            return "";
+        }
+
+        QTextStream lecture(&fichier);
+
+        QString lignes = "";
+        QString ligneCherchee(mentionPrefixe);
+        int i = 0;
+        lecture.seek(0);
+
+        do
+        {
+            lignes = lecture.readLine();
+            i++;
+
+            if (!lignes.startsWith(ligneCherchee) && lecture.atEnd())
+                throw QString("Erreur 7 : impossible de trouver la mention " + mentionPrefixe + " dans le fichier " + cheminAbsolu);
+
+        }while (!lignes.startsWith(ligneCherchee));
+
+        lignes.remove(0, ligneCherchee.size());
+
+        fichier.close();
+
+        return lignes;
     }
-    if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
+    catch (const QString &erreur)
     {
-        throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
-        return "";
+        QMessageBox::critical(fenetreParente, "Erreur", erreur);
     }
-
-    QTextStream lecture(&fichier);
-
-    QString lignes = "";
-    QString ligneCherchee(mentionPrefixe);
-    int i = 0;
-    lecture.seek(0);
-
-    do
-    {
-        lignes = lecture.readLine();
-        i++;
-
-        if (!lignes.startsWith(ligneCherchee) && lecture.atEnd())
-            throw QString("Erreur 7 : impossible de trouver la mention " + mentionPrefixe + " dans le fichier " + cheminAbsolu);
-
-    }while (!lignes.startsWith(ligneCherchee));
-
-    lignes.remove(0, ligneCherchee.size());
-
-    fichier.close();
-
-    return lignes;
 }
 
 QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbsolu)
 {
     //On recherche le nom de la population, en enlevant les astérisques
 
-    QFile fichier;
-    fichier.setFileName(cheminAbsolu);
-    if (!fichier.exists())
-        throw QString("Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
-    if (!fichier.open(QIODevice::ReadWrite | QIODevice::Text))
-        throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
-
-    QTextStream lectureFichier(&fichier);
-    QString lignes = lectureFichier.readLine();
-    lignes = lectureFichier.readLine();     //On part de la seconde ligne, car la première est normalement composée exclusivement d'astérisques
-
-    bool asterisquesAbsents = false;
-    int i = 0;
-    while (asterisquesAbsents == false)
+    try
     {
-        QChar asterisqueOuNon = lignes.at(i);
+        QFile fichier;
+        fichier.setFileName(cheminAbsolu);
+        if (!fichier.exists())
+            throw QString("Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
+        if (!fichier.open(QIODevice::ReadWrite | QIODevice::Text))
+            throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
 
-        if (asterisqueOuNon != "*")
-            asterisquesAbsents = true;
+        QTextStream lectureFichier(&fichier);
+        QString lignes = lectureFichier.readLine();
+        lignes = lectureFichier.readLine();     //On part de la seconde ligne, car la première est normalement composée exclusivement d'astérisques
 
-        else
-            i++;
+        bool asterisquesAbsents = false;
+        int i = 0;
+        while (asterisquesAbsents == false)
+        {
+            QChar asterisqueOuNon = lignes.at(i);
 
-        if (i == lignes.size())
-            throw QString("Erreur 5 : le fichier " + fichier.fileName() + " est corrompu !");
+            if (asterisqueOuNon != "*")
+                asterisquesAbsents = true;
+
+            else
+                i++;
+
+            if (i == lignes.size())
+                throw QString("Erreur 5 : le fichier " + fichier.fileName() + " est corrompu !");
+        }
+
+        lignes.remove(0, i+14); //i+14, car on enlève aussi la mention " Population : "
+
+        asterisquesAbsents = false;
+        i = lignes.size() - 1;
+        while (asterisquesAbsents == false)
+        {
+            QChar asterisqueOuNon = lignes.at(i);
+
+            if (asterisqueOuNon != "*")
+                asterisquesAbsents = true;
+
+            else
+                i--;
+
+            if (i == 0)
+                throw QString("Erreur 6 : le fichier " + fichier.fileName() + " est corrompu !");
+        }
+
+        lignes.chop(lignes.size() - i);
+
+        fichier.close();
+
+        return lignes;
     }
-
-    lignes.remove(0, i+14); //i+14, car on enlève aussi la mention " Population : "
-
-    asterisquesAbsents = false;
-    i = lignes.size() - 1;
-    while (asterisquesAbsents == false)
+    catch (const QString &erreur)
     {
-        QChar asterisqueOuNon = lignes.at(i);
-
-        if (asterisqueOuNon != "*")
-            asterisquesAbsents = true;
-
-        else
-            i--;
-
-        if (i == 0)
-            throw QString("Erreur 6 : le fichier " + fichier.fileName() + " est corrompu !");
+        QMessageBox::critical(fenetreParente, "Erreur", erreur);
     }
-
-    lignes.chop(lignes.size() - i);
-
-    fichier.close();
-
-    return lignes;
 }

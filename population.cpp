@@ -27,41 +27,38 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
     try
     {
         fichierPopulation = new QFile(*p_fichierPopulo);
-        if (!fichierPopulation->exists())
-            throw QString("Erreur 8 : le fichier " + fichierPopulation->fileName() + " n'existe pas.");
-        if (!fichierPopulation->open(QIODevice::ReadWrite | QIODevice::Text))
-            throw QString("Erreur 9 : le fichier " + fichierPopulation->fileName() + " n'a pas pu être ouvert.");
-
-        QTextStream lectureFichier(fichierPopulation);
-        QString lignesPopulo = lectureFichier.readLine();
-        lignesPopulo = lectureFichier.readLine();
 
         //On recherche le nom de la population
 
         nomPopulation = new QString;
         *nomPopulation = chercherNomPopulation(fenetreParente, fichierPopulation->fileName());
-        if (*nomPopulation == "")
+        if (*nomPopulation  == "@@@ERREUR@@@")
             throw bool(true);
 
         //On recherche le paquet d'opinions
 
-        QString nomFichierOpinions = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Paquet d'opinions : ");
-        if (nomFichierOpinions == "")
+        QString cherche = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Paquet d'opinions : ");
+        if (cherche == "@@@ERREUR@@@")
             throw bool(true);
-        fichierOpinions = new QFile(nomFichierOpinions);
-        if (!fichierOpinions->exists())
-            throw QString("Erreur 8 : le fichier " + fichierOpinions->fileName() + " n'existe pas.");
-        if (!fichierOpinions->open(QIODevice::ReadWrite | QIODevice::Text))
-            throw QString("Erreur 9 : le fichier " + fichierOpinions->fileName() + " n'a pas pu être ouvert.");
+        fichierOpinions = new QFile(cherche);
 
-        //On recherche la taille de la population
+        //On recherche la taille de la population totale et simulée
 
-        QString taillePopulation = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Citoyens simulés : ");
-        if (nomFichierOpinions == "")
+        cherche = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Citoyens simulés : ");
+        if (cherche == "@@@ERREUR@@@")
             throw bool(true);
-        qDebug() << taillePopulation;
+        taillePopulationSimulee = new int;
+        *taillePopulationSimulee = cherche.toInt();
 
-        Etat = new Territoire;
+        cherche = chercherInfoStandard(fenetreParente, fichierPopulation->fileName(), "*Citoyens : ");
+        if (cherche == "@@@ERREUR@@@")
+            throw bool(true);
+        ratioPopulationSurSimules = new double;
+        *ratioPopulationSurSimules = cherche.toInt() / *taillePopulationSimulee;
+
+
+
+        Etat = new Territoire(*nomPopulation, *taillePopulationSimulee);
         emplacementFichiers = new QString;
     }
     catch (const QString &erreur)
@@ -124,7 +121,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
          * Un fichier "population.populopack", paquet d'opinions, c'est-à-dire référençant les opinions et les solutions relatives à la population (législation sur telle ou telle chose ---> Autorisation/Interdiction/Tolérance à la consommation, etc., ou encore système politique ---> démocratique/monarchique/totalitaire, etc.) ;
          * Un fichier "territoire.subpopulo" (remplacer "territoire" par le nom du territoire), du même type que le fichier .populo, mais à plus petite échelle, à chaque territoire subordonné ;
          * Un fichier "population_citoyen.populocitoyen" (remplacer "citoyen" par un numéro d'identification quelconque) pour chaque citoyen, renseignant sur l'ensemble de ses caractéristiques (âge, genre, solutions préconisées sur toutes les opinions, etc.) ;
-         * Un fichier "propriété.populopropri" (remplacer "propriété" par la propriété en question) pour chaque propriété des citoyens : âge, genre, activité, etc., ainsi que l'ensemble des solutions qu'il peut y avoir (1 an, 2 ans, 3 ans ... 150 ans ; femme, homme ; agriculteur, infirmier, demandeur d'emploi, retraité, étudiant, etc.).
+         * Un fichier "propriété.populopropri" (remplacer "propriété" par la propriété en question) pour chaque propriété des citoyens : âge, genre, activité, etc., contenant l'ensemble des solutions qu'il peut y avoir (1 an, 2 ans, 3 ans ... 150 ans ; femme, homme ; agriculteur, infirmier, demandeur d'emploi, retraité, étudiant, etc.).
          */
     }
     catch (const QString &erreur)

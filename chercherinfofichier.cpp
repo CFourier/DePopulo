@@ -17,15 +17,9 @@ QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsol
         QFile fichier;
         fichier.setFileName(cheminAbsolu);
         if (!fichier.exists())
-        {
-            QMessageBox::critical(fenetreParente, "Erreur", "Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
-            return "";
-        }
+            throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
         if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
-            return "";
-        }
+            throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
 
         QTextStream lecture(&fichier);
 
@@ -40,7 +34,7 @@ QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsol
             i++;
 
             if (!lignes.startsWith(ligneCherchee) && lecture.atEnd())
-                throw QString("Erreur 7 : impossible de trouver la mention " + mentionPrefixe + " dans le fichier " + cheminAbsolu);
+                throw QString("Erreur 7 : impossible de trouver la mention \"" + mentionPrefixe + "\" dans le fichier \"" + cheminAbsolu + "\"");
 
         }while (!lignes.startsWith(ligneCherchee));
 
@@ -54,6 +48,8 @@ QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsol
     {
         QMessageBox::critical(fenetreParente, "Erreur", erreur);
     }
+
+    return "@@@ERREUR@@@";
 }
 
 QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbsolu)
@@ -65,9 +61,9 @@ QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbso
         QFile fichier;
         fichier.setFileName(cheminAbsolu);
         if (!fichier.exists())
-            throw QString("Erreur 8 : le fichier " + fichier.fileName() + " n'existe pas.");
+            throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
         if (!fichier.open(QIODevice::ReadWrite | QIODevice::Text))
-            throw QString("Erreur 9 : le fichier " + fichier.fileName() + " n'a pas pu être ouvert.");
+            throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
 
         QTextStream lectureFichier(&fichier);
         QString lignes = lectureFichier.readLine();
@@ -86,7 +82,7 @@ QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbso
                 i++;
 
             if (i == lignes.size())
-                throw QString("Erreur 5 : le fichier " + fichier.fileName() + " est corrompu !");
+                throw QString("Erreur 5 : le fichier \"" + fichier.fileName() + "\" est corrompu !");
         }
 
         lignes.remove(0, i+14); //i+14, car on enlève aussi la mention " Population : "
@@ -104,7 +100,7 @@ QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbso
                 i--;
 
             if (i == 0)
-                throw QString("Erreur 6 : le fichier " + fichier.fileName() + " est corrompu !");
+                throw QString("Erreur 6 : le fichier \"" + fichier.fileName() + "\" est corrompu !");
         }
 
         lignes.chop(lignes.size() - i);
@@ -117,4 +113,62 @@ QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbso
     {
         QMessageBox::critical(fenetreParente, "Erreur", erreur);
     }
+
+    return "@@@ERREUR@@@";
+}
+
+QString chercherInfoSubordonnee(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrincipale, const QString &mentionSubordonnee)
+{
+    try
+    {
+        QFile fichier;
+        fichier.setFileName(cheminAbsolu);
+        if (!fichier.exists())
+            throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
+        if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
+            throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
+
+        QTextStream lecture(&fichier);
+
+        QString lignes = "";
+        QString ligneCherchee(mentionPrincipale);
+        int i = 0;
+        lecture.seek(0);
+
+        do //On cherche la mention principale
+        {
+            lignes = lecture.readLine();
+            i++;
+
+            if (!lignes.startsWith(ligneCherchee) && lecture.atEnd())
+                throw QString("Erreur 7 : impossible de trouver la mention \"" + mentionPrincipale + "\" dans le fichier \"" + cheminAbsolu + "\"");
+
+        }while (!lignes.startsWith(ligneCherchee));
+
+        lignes = "";
+        ligneCherchee = mentionSubordonnee;
+        i = 0;
+
+        do //On cherche la mention subordonnée
+        {
+            lignes = lecture.readLine();
+            i++;
+
+            if (lignes.startsWith("\n"))
+                throw QString("Erreur 10 : impossible de trouver la mention \"" + mentionSubordonnee + "\" subordonnée à la mention \"" + mentionPrincipale + "\" dans le fichier \"" + cheminAbsolu + "\"");
+
+        }while(!lignes.startsWith(ligneCherchee) && lecture.atEnd());
+
+        lignes.remove(0, ligneCherchee.size());
+
+        fichier.close();
+
+        return lignes;
+    }
+    catch (const QString &erreur)
+    {
+        QMessageBox::critical(fenetreParente, "Erreur", erreur);
+    }
+
+    return "@@@ERREUR@@@";
 }

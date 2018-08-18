@@ -26,6 +26,8 @@ class Population
     Territoire *Etat;
     QString *nomPopulation;
     QString *emplacementFichiers;
+    int *taillePopulationSimulee;
+    double *ratioPopulationSurSimules;
 
     QFile *fichierPopulation;
     QFile *fichierOpinions;

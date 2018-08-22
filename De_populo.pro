@@ -14,7 +14,8 @@ SOURCES += \
     datenaissance.cpp \
     population.cpp \
     dialoguegenerer.cpp \
-    chercherinfofichier.cpp
+    chercherinfofichier.cpp \
+    ecrirefichier.cpp
 
 HEADERS += \
     fenetreprincipale.h \
@@ -27,4 +28,5 @@ HEADERS += \
     datenaissance.h \
     population.h \
     dialoguegenerer.h \
-    chercherinfofichier.h
+    chercherinfofichier.h \
+    ecrirefichier.h

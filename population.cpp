@@ -8,6 +8,7 @@
 #include <QtDebug>
 
 #include "chercherinfofichier.h"
+#include "ecrirefichier.h"
 #include "fenetreprincipale.h"
 #include "population.h"
 
@@ -55,8 +56,6 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
             throw bool(true);
         ratioPopulationSurSimules = new double;
         *ratioPopulationSurSimules = cherche.toInt() / *taillePopulationSimulee;
-
-
 
         Etat = new Territoire(*nomPopulation, *taillePopulationSimulee);
         emplacementFichiers = new QString;

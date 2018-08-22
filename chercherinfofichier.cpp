@@ -62,7 +62,7 @@ QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbso
         fichier.setFileName(cheminAbsolu);
         if (!fichier.exists())
             throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
-        if (!fichier.open(QIODevice::ReadWrite | QIODevice::Text))
+        if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
             throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
 
         QTextStream lectureFichier(&fichier);

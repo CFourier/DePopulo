@@ -12,5 +12,6 @@
 QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrefixe);
 QString chercherNomPopulation(QWidget *fenetreParente, const QString &cheminAbsolu);
 QString chercherInfoSubordonnee(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrincipale, const QString &mentionSubordonnee);
+QVector<QString> chercherInfoListe(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrefixe);
 
 #endif // CHERCHERINFOFICHIER_H

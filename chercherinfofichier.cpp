@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QtDebug>
 
 QString chercherInfoStandard(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrefixe)
 {
@@ -171,4 +172,62 @@ QString chercherInfoSubordonnee(QWidget *fenetreParente, const QString &cheminAb
     }
 
     return "@@@ERREUR@@@";
+}
+
+QVector<QString> chercherInfoListe(QWidget *fenetreParente, const QString &cheminAbsolu, const QString &mentionPrefixe)
+{
+    try
+    {
+        QFile fichier;
+        fichier.setFileName(cheminAbsolu);
+        if (!fichier.exists())
+            throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
+        if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
+            throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
+
+        QTextStream lecture(&fichier);
+
+        QString lignes = "";
+        QString ligneCherchee(mentionPrefixe);
+        int i = 0;
+        lecture.seek(0);
+
+        do
+        {
+            lignes = lecture.readLine();
+            i++;
+
+            if (!lignes.startsWith(ligneCherchee) && lecture.atEnd())
+                throw QString("Erreur 7 : impossible de trouver la mention \"" + mentionPrefixe + "\" dans le fichier \"" + cheminAbsolu + "\"");
+
+        }while (!lignes.startsWith(ligneCherchee));
+
+        QVector<QString> liste;
+
+        do
+        {
+            lignes = lecture.readLine();
+            i++;
+
+            liste.push_back(lignes);
+
+        }while (!lignes.startsWith("\n") && !lecture.atEnd());
+
+        fichier.close();
+
+        for (i = 0; i < liste.size(); i++)
+        {
+            liste[i].remove("*");
+        }
+
+        return liste;
+    }
+    catch (const QString &erreur)
+    {
+        QMessageBox::critical(fenetreParente, "Erreur", erreur);
+    }
+
+    QVector<QString> erreur;
+    erreur.push_back("@@@ERREUR@@@");
+    return erreur;
 }

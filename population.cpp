@@ -58,6 +58,11 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
         *ratioPopulationSurSimules = cherche.toInt() / *taillePopulationSimulee;
 
         Etat = new Territoire(*nomPopulation, *taillePopulationSimulee);
+
+        QVector<QString> territoiresSubordonnes = chercherInfoListe(fenetreParente, fichierPopulation->fileName(), "*Territoires subordonnés : ");
+        if (territoiresSubordonnes[0] == "@@@ERREUR@@@")
+            throw bool(true);
+
         emplacementFichiers = new QString;
     }
     catch (const QString &erreur)

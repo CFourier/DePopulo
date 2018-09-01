@@ -27,22 +27,21 @@ Territoire::Territoire(const QString &p_nomTerritoire, const int &p_taillePopula
     nomTerritoire = new QString(p_nomTerritoire);
     territoiresInclus = new QVector<Territoire>;
     taillePopulation = new int(p_taillePopulation);
+
+    //Préparer l'onglet/la fenêtre (en appelant un objet d'une classe à créer) qui permettra de déterminer les choix concernant chaque territoire subordonné
 }
 
-void Territoire::inclureTerritoire(const Territoire &territoire)
+void Territoire::inclureTerritoire(Territoire &territoire)
 {
     territoiresInclus->push_back(territoire);
 }
 
-void Territoire::integrerAuTerritoire(Territoire &territoire)
+QString Territoire::getNomTerritoire()
 {
-    territoire.inclureTerritoire(*this);
+    return *nomTerritoire;
 }
 
-void Territoire::integrerAuTerritoire(const QString &p_nomTerritoire, Territoire Etat)
+QVector<Territoire> Territoire::getTerritoiresSubordonnes()
 {
-    Territoire territoire(p_nomTerritoire);
-    territoire.inclureTerritoire(*this);
-
-    Etat.inclureTerritoire(territoire);
+    return *territoiresInclus;
 }

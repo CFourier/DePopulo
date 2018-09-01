@@ -204,14 +204,13 @@ QVector<QString> chercherInfoListe(QWidget *fenetreParente, const QString &chemi
 
         QVector<QString> liste;
 
-        do
+        while (!lignes.startsWith("\n") && !lecture.atEnd())
         {
             lignes = lecture.readLine();
             i++;
 
             liste.push_back(lignes);
-
-        }while (!lignes.startsWith("\n") && !lecture.atEnd());
+        }
 
         fichier.close();
 

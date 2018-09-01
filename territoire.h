@@ -7,6 +7,7 @@
 #define TERRITOIRE_H
 
 #include <QVector>
+#include <QDir>
 
 class Territoire
 {
@@ -15,9 +16,9 @@ class Territoire
     Territoire();
     Territoire(const QString &p_nomTerritoire);
     Territoire(const QString &p_nomTerritoire, const int &p_taillePopulation);
-    void inclureTerritoire(const Territoire &territoire);
-    void integrerAuTerritoire(Territoire &territoire);
-    void integrerAuTerritoire(const QString &p_nomTerritoire, Territoire Etat);
+    void inclureTerritoire(Territoire &territoire);
+    QString getNomTerritoire();
+    QVector<Territoire> getTerritoiresSubordonnes();
 
     protected :
 

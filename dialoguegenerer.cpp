@@ -21,7 +21,15 @@ DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
     layoutFormulaire->addRow("Nom de la population (ex. France, Allemagne ...) :", nomPopulation);
 
     emplacementFichiers = new QLabel("Emplacement des fichiers :");
-    cheminFichiersPopulation = new QLineEdit(QCoreApplication::applicationDirPath());
+
+    QDir dir(QCoreApplication::applicationDirPath() + "/Populations");
+    if (!dir.exists())
+    {
+        QDir dirD(QCoreApplication::applicationDirPath());
+        dirD.mkpath(QCoreApplication::applicationDirPath() + "/Populations");
+    }
+
+    cheminFichiersPopulation = new QLineEdit(QCoreApplication::applicationDirPath() + "/Populations");
     parcourirCheminFichiersPopulation = new QPushButton("Parcourir");
     emplacementFichiersChoisi = new QString("NULL");
 

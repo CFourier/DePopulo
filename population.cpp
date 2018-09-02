@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QtDebug>
 #include <QCoreApplication>
+#include <QDate>
+#include <QTime>
 
 #include "chercherinfofichier.h"
 #include "ecrirefichier.h"
@@ -145,7 +147,7 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
     }
 }
 
-Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers)
+Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions)
 {
     Etat = new Territoire("Etat");
     nomPopulation = new QString(p_nomPopulation);
@@ -186,10 +188,42 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
 
         //Dans ce dossier, on crée le fichier principal "nomPopulation.populo"
 
+        QTextStream fluxEcriture;
+
         fichierPopulation = new QFile();
         fichierPopulation->setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populo"); //Ne fonctionne pas
         if (!fichierPopulation->open(QIODevice::WriteOnly | QIODevice::Text))
             throw QString("Impossible d'ouvrir le fichier " + fichierPopulation->fileName());
+
+        fluxEcriture.setDevice(fichierPopulation);
+
+        for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+            fluxEcriture << "*";
+
+        int nombreAsterisquesAvant = (TAILLE_MAXIMALE_NOM_POPULATION - nomPopulation->size()) / 2;
+        int nombreAsterisquesApres = nombreAsterisquesAvant + (TAILLE_MAXIMALE_NOM_POPULATION - nomPopulation->size()) % 2;
+
+        fluxEcriture << "\n";
+        for (int i = 0; i < nombreAsterisquesAvant; i++)
+            fluxEcriture << "*";
+
+        fluxEcriture << " Population : " + *nomPopulation + " ";
+
+        for (int i = 0; i < nombreAsterisquesApres; i++)
+            fluxEcriture << "*";
+
+        fluxEcriture << "\n";
+        for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+            fluxEcriture << "*";
+
+        fluxEcriture << "\n******* NE PAS TOUCHER, SAUF INDICATION *******\n******** CONTRAIRE DE L'ADMINISTRATEUR ********\n***************** DE DE POPULO ****************\n***********************************************\n***********************************************\n";
+        fluxEcriture << "\n*Créée le " + QDate::currentDate().toString("dd/MM/yyyy") + " à " + QTime::currentTime().toString("HH:mm");
+
+        fichierOpinions = new QFile();
+        fichierOpinions->setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populopack");
+        fluxEcriture << "\n*Paquet d'opinions : " + fichierOpinions->fileName();
+
+
 
         fichierPopulation->close();
 
@@ -205,13 +239,6 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
     {
         QMessageBox::critical(fenetreParente, "Erreur", erreur);
     }
-}
-
-Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions)
-{
-    Etat = new Territoire("Etat");
-    nomPopulation = new QString(p_nomPopulation);
-    emplacementFichiers = new QString(p_emplacementFichiers);
 }
 
 Population::~Population()

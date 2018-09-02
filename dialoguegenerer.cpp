@@ -14,6 +14,7 @@ DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
     setWindowTitle("Nouvelle population");
 
     nomPopulation = new QLineEdit;
+    nomPopulation->setMaxLength(TAILLE_MAXIMALE_NOM_POPULATION);
     paquetOpinions = new QPushButton("Paquet d'opinions de départ");
     paquetOpinionsChoisi = new QString("NULL");
 

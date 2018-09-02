@@ -6,6 +6,9 @@
 #ifndef POPULATION_H
 #define POPULATION_H
 
+#define LARGEUR_EN_TETE_FICHIER 47
+#define TAILLE_MAXIMALE_NOM_POPULATION LARGEUR_EN_TETE_FICHIER - 15
+
 #include <QFile>
 
 #include "territoire.h"
@@ -16,8 +19,7 @@ class Population
 
     Population();
     Population(QWidget *fenetreParente, QString *p_fichierPopulo); //Pour charger une population
-    Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers); //Pour créer une population
-    Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions); //Pour créer une population
+    Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions = "%%NULL%%"); //Pour créer une population
     ~Population();
 
     protected :

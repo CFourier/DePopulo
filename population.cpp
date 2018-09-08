@@ -147,11 +147,13 @@ Population::Population(QWidget *fenetreParente, QString *p_fichierPopulo)
     }
 }
 
-Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions)
+Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, const QString &p_emplacementFichiers, const QString &paquetOpinions, const QString &paquetProprietes, const int p_taillePopulation, const int p_taillePopulationSimulee)
 {
     Etat = new Territoire("Etat");
     nomPopulation = new QString(p_nomPopulation);
     emplacementFichiers = new QString(p_emplacementFichiers);
+    taillePopulationSimulee = new int;
+    *taillePopulationSimulee = p_taillePopulationSimulee;
     QString *nomDossier;
     nomDossier = new QString("DePopulo - " + *nomPopulation);
 
@@ -186,6 +188,15 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
         if (emplacementEstCree == false)
             throw QString("Erreur 2 : le dossier " + *nomDossier + " n'a pas pu être créé.");
 
+        //On crée tous les dossiers nécessaires
+
+        QDir dossier;
+        dossier.setPath(*emplacementFichiers);
+        dossier.mkdir("Citoyens");
+        dossier.mkdir("Territoires");
+        dossier.mkdir("Opinions");
+        dossier.mkdir("Propriétés");
+
         //Dans ce dossier, on crée le fichier principal "nomPopulation.populo"
 
         QTextStream fluxEcriture;
@@ -212,27 +223,182 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
         for (int i = 0; i < nombreAsterisquesApres; i++)
             fluxEcriture << "*";
 
-        fluxEcriture << "\n";
+        fluxEcriture << "\n****************** De populo ******************\n";
         for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
             fluxEcriture << "*";
 
         fluxEcriture << "\n******* NE PAS TOUCHER, SAUF INDICATION *******\n******** CONTRAIRE DE L'ADMINISTRATEUR ********\n***************** DE DE POPULO ****************\n***********************************************\n***********************************************\n";
         fluxEcriture << "\n*Créée le " + QDate::currentDate().toString("dd/MM/yyyy") + " à " + QTime::currentTime().toString("HH:mm");
 
+        //On crée le paquet d'opinions
+
+        if (paquetOpinions != "%%NULL%%")
+        {
+            QFile paqOpinions;
+            paqOpinions.setFileName(paquetOpinions);
+            if (!paqOpinions.open(QIODevice::WriteOnly | QIODevice::Text))
+                throw QString("Impossible d'ouvrir le fichier " + paqOpinions.fileName());
+
+            paqOpinions.copy(*emplacementFichiers + "/" + *nomPopulation + ".populopack");
+        }
+
+        else
+        {
+            QFile paqOpinions;
+            paqOpinions.setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populopack");
+            if (!paqOpinions.open(QIODevice::WriteOnly | QIODevice::Text))
+                throw QString("Impossible d'ouvrir le fichier " + paqOpinions.fileName());
+
+            QTextStream fluxEcriturePPack;
+            fluxEcriturePPack.setDevice(&paqOpinions);
+
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcriturePPack << "*";
+
+            fluxEcriturePPack << "\n************** Paquet d'opinions **************";
+            fluxEcriturePPack << "\n****************** De populo ******************\n";
+
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcriturePPack << "*";
+
+            fluxEcriturePPack << "\n******* NE PAS TOUCHER, SAUF INDICATION *******\n******** CONTRAIRE DE L'ADMINISTRATEUR ********\n***************** DE DE POPULO ****************\n***********************************************\n***********************************************\n";
+
+            paqOpinions.close();
+        }
+
         fichierOpinions = new QFile();
         fichierOpinions->setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populopack");
+
         fluxEcriture << "\n*Paquet d'opinions : " + fichierOpinions->fileName();
 
+        //On crée le paquet de propriétés
 
+        if (paquetProprietes != "%%NULL%%")
+        {
+            QFile paqProprietes;
+            paqProprietes.setFileName(paquetOpinions);
+            if (!paqProprietes.open(QIODevice::WriteOnly | QIODevice::Text))
+                throw QString("Impossible d'ouvrir le fichier " + paqProprietes.fileName());
+
+            paqProprietes.copy(*emplacementFichiers + "/" + *nomPopulation + ".populopropripack");
+        }
+
+        else
+        {
+            QFile paqProprietes;
+            paqProprietes.setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populopropripack");
+            if (!paqProprietes.open(QIODevice::WriteOnly | QIODevice::Text))
+                throw QString("Impossible d'ouvrir le fichier " + paqProprietes.fileName());
+
+            QTextStream fluxEcriturePPack;
+            fluxEcriturePPack.setDevice(&paqProprietes);
+
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcriturePPack << "*";
+
+            fluxEcriturePPack << "\n************ Paquet de propriétés *************";
+            fluxEcriturePPack << "\n****************** De populo ******************\n";
+
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcriturePPack << "*";
+
+            fluxEcriturePPack << "\n******* NE PAS TOUCHER, SAUF INDICATION *******\n******** CONTRAIRE DE L'ADMINISTRATEUR ********\n***************** DE DE POPULO ****************\n***********************************************\n***********************************************\n";
+
+            paqProprietes.close();
+        }
+
+        fichierProprietes = new QFile();
+        fichierProprietes->setFileName(*emplacementFichiers + "/" + *nomPopulation + ".populopropripack");
+
+        fluxEcriture << "\n*Paquet de propriétés : " + fichierProprietes->fileName();
+        fluxEcriture << "\n\n*Citoyens : " << p_taillePopulation;
+        fluxEcriture << QString("\n*Citoyens simulés : ") << p_taillePopulationSimulee;
+        fluxEcriture << QString("\n\n*Territoires subordonnés : ");
+
+        if (paquetOpinions != "%%NULL%%") //En plus de copier le paquet, on copie toutes les opinions
+        {
+            QFileInfo fichierOpinionsBase(paquetOpinions);
+            QDir dossierOpinionsBase = fichierOpinionsBase.dir();
+            QString emplacementOpinionsBase = dossierOpinionsBase.absolutePath();
+
+            QVector<QString> opinions = lireFichier(fenetreParente, fichierOpinionsBase.fileName());
+
+            for (int i = 0; i < opinions.size(); i++)
+            {
+                QFile fichierOpinionACopier;
+                fichierOpinionACopier.setFileName(emplacementOpinionsBase + "/" + opinions[i].toLower() + ".populopinion");
+                if (!fichierOpinionACopier.open(QIODevice::WriteOnly | QIODevice::Text))
+                    throw QString("Impossible d'ouvrir le fichier " + fichierOpinionACopier.fileName());
+
+                fichierOpinionACopier.copy(*emplacementFichiers + "/" + *nomPopulation + "/Opinions/" + opinions[i].toLower() + ".populopinion");
+            }
+        }
+
+        if (paquetProprietes != "%%NULL%%") //En plus de copier le paquet, on copie toutes les propriétés
+        {
+            QFileInfo fichierProprietesBase(paquetProprietes);
+            QDir dossierProprietesBase = fichierProprietesBase.dir();
+            QString emplacementProprietesBase = dossierProprietesBase.absolutePath();
+
+            QVector<QString> proprietes = lireFichier(fenetreParente, fichierProprietesBase.fileName());
+
+            for (int i = 0; i < proprietes.size(); i++)
+            {
+                QFile fichierProprieteACopier;
+                fichierProprieteACopier.setFileName(emplacementProprietesBase + "/" + proprietes[i].toLower() + ".populopropri");
+                if (!fichierProprieteACopier.open(QIODevice::WriteOnly | QIODevice::Text))
+                    throw QString("Impossible d'ouvrir le fichier " + fichierProprieteACopier.fileName());
+
+                fichierProprieteACopier.copy(*emplacementFichiers + "/" + *nomPopulation + "/Propriétés/" + proprietes[i].toLower() + ".populopropri");
+            }
+        }
+
+
+        for (int i = 0; i < *taillePopulationSimulee; i++)
+        {
+            QFile fichierCitoyen;
+            fichierCitoyen.setFileName(*emplacementFichiers + "/Citoyens/citoyen" + QVariant(i).toString() + ".populocitoyen"); //QVariant(i).toString : on crée un objet qui contient un int ; on applique ensuite la méthode toString() sur l'objet et on obtient l'équivalent de l'entier en QString.
+            if (!fichierCitoyen.open(QIODevice::WriteOnly | QIODevice::Text))
+                throw QString("Impossible d'ouvrir le fichier " + fichierCitoyen.fileName());
+
+            QTextStream fluxEcritureCitoyen;
+            fluxEcritureCitoyen.setDevice(&fichierCitoyen);
+
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcritureCitoyen << "*";
+
+            int nombreAsterisquesAvant = (TAILLE_MAXIMALE_NOM_POPULATION - nomPopulation->size()) / 2;
+            int nombreAsterisquesApres = nombreAsterisquesAvant + (TAILLE_MAXIMALE_NOM_POPULATION - nomPopulation->size()) % 2;
+
+            fluxEcritureCitoyen << "\n";
+            for (int i = 0; i < nombreAsterisquesAvant; i++)
+                fluxEcritureCitoyen << "*";
+
+            fluxEcritureCitoyen << " Population : " + *nomPopulation + " ";
+
+            for (int i = 0; i < nombreAsterisquesApres; i++)
+                fluxEcritureCitoyen << "*";
+
+            fluxEcritureCitoyen << "\n****************** De populo ******************\n";
+            for (int i = 0; i < LARGEUR_EN_TETE_FICHIER; i++)
+                fluxEcritureCitoyen << "*";
+
+            fluxEcritureCitoyen << "\n******* NE PAS TOUCHER, SAUF INDICATION *******\n******** CONTRAIRE DE L'ADMINISTRATEUR ********\n***************** DE DE POPULO ****************\n***********************************************\n***********************************************\n";
+        }
 
         fichierPopulation->close();
 
         /* On crée ces fichiers (remplacer "population" par le nom de la population) :
-         * Un fichier "population.populo" recensant les caractéristiques de l'État : nom, population totale, territoires subordonnés, etc. ainsi que le fichier .populopack correspondant à la population ;
-         * Un fichier "population.populopack", paquet d'opinions, c'est-à-dire référençant les opinions et les solutions relatives à la population (législation sur telle ou telle chose ---> Autorisation/Interdiction/Tolérance à la consommation, etc., ou encore système politique ---> démocratique/monarchique/totalitaire, etc.) ;
-         * Un fichier "territoire.subpopulo" (remplacer "territoire" par le nom du territoire), du même type que le fichier .populo, mais à plus petite échelle, à chaque territoire subordonné ;
-         * Un fichier "population_citoyen.populocitoyen" (remplacer "citoyen" par un numéro d'identification quelconque) pour chaque citoyen, renseignant sur l'ensemble de ses caractéristiques (âge, genre, solutions préconisées sur toutes les opinions, etc.) ;
-         * Un fichier "propriété.populopropri" (remplacer "propriété" par la propriété en question) pour chaque propriété des citoyens : âge, genre, activité, etc., contenant l'ensemble des solutions qu'il peut y avoir (1 an, 2 ans, 3 ans ... 150 ans ; femme, homme ; agriculteur, infirmier, demandeur d'emploi, retraité, étudiant, etc.).
+         * [FAIT] Un fichier "population.populo" recensant les caractéristiques de l'État : nom, population totale, territoires subordonnés, etc. ainsi que le fichier .populopack correspondant à la population ;
+         * [FAIT] Un fichier "population.populopack", paquet d'opinions, c'est-à-dire référençant les opinions relatives à la population (législation sur telle ou telle chose ---> Autorisation/Interdiction/Tolérance à la consommation, etc., ou encore système politique ---> démocratique/monarchique/totalitaire, etc.) ;
+         * [FAIT] Un fichier "opinion.populopinion" (remplacer "opinion" par le nom de l'opinion) par opinion, référençant les différentes solutions possibles qui s'y rapportent ;
+         * Un fichier "territoire.subpopulo" (remplacer "territoire" par le nom du territoire), du même type que le fichier .populo, mais à plus petite échelle, pour chaque territoire subordonné ;
+         * [FAIT] Un fichier "citoyenX.populocitoyen" (remplacer "X" par un numéro d'identification quelconque) pour chaque citoyen, renseignant sur l'ensemble de ses caractéristiques (âge, genre, solutions préconisées sur toutes les opinions, etc.) ;
+         * [FAIT] Un fichier "population.populopropripack", recensant toutes les propriétés des individus
+         * [FAIT] Un fichier "propriété.populopropri" (remplacer "propriété" par la propriété en question) pour chaque propriété des citoyens : âge, genre, activité, etc., contenant l'ensemble des solutions qu'il peut y avoir (1 an, 2 ans, 3 ans ... 150 ans ; femme, homme ; agriculteur, infirmier, demandeur d'emploi, retraité, étudiant, etc.).
+         *
+         * Remplacer les "throw bool"/"throw QString" par quelque chose d'un peu plus ... utile, rigoureux et facile à consulter
+         * Ajouter une barre de progression lors de la création d'une population (QProgressBar/QProgressDialog)
          */
     }
     catch (const QString &erreur)

@@ -2,6 +2,8 @@ QT += widgets
 QT += core
 QT += sql
 
+DEFINES += QT_NO_CAST_TO_ASCII
+
 SOURCES += \
     main.cpp \
     fenetreprincipale.cpp \

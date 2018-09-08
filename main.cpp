@@ -29,7 +29,7 @@
 #include "ville.h"
 
 int main(int argc, char *argv[])
-{
+{    
     qsrand(0);
 
     QApplication app(argc, argv);

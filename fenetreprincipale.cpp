@@ -144,3 +144,8 @@ void FenetrePrincipale::chargerPopulation()
 
     setPopulation(*population);
 }
+
+/* Note :
+ * QTreeView à la place de QTableView
+ * QStandardItemModel ou QStringListModel ?
+ */

@@ -230,3 +230,41 @@ QVector<QString> chercherInfoListe(QWidget *fenetreParente, const QString &chemi
     erreur.push_back("@@@ERREUR@@@");
     return erreur;
 }
+
+QVector<QString> lireFichier(QWidget *fenetreParente, const QString &cheminAbsolu)
+{
+    try
+    {
+        QFile fichier;
+        fichier.setFileName(cheminAbsolu);
+        if (!fichier.exists())
+            throw QString("Erreur 8 : le fichier \"" + fichier.fileName() + "\" n'existe pas.");
+        if (!fichier.open(QIODevice::ReadOnly | QIODevice::Text))
+            throw QString("Erreur 9 : le fichier \"" + fichier.fileName() + "\" n'a pas pu être ouvert.");
+
+        QTextStream lecture(&fichier);
+
+        for (int i = 0; i < 10; i++) //On enlève l'en-tête
+            lecture.readLine();
+
+        QVector<QString> liste;
+        QString lignes = "";
+
+        while (!lecture.atEnd())
+        {
+            lignes = lecture.readLine();
+            lignes.remove("*");
+            liste.push_back(lignes);
+        }
+
+        return liste;
+    }
+    catch (const QString &erreur)
+    {
+        QMessageBox::critical(fenetreParente, "Erreur", erreur);
+    }
+
+    QVector<QString> erreur;
+    erreur.push_back("@@@ERREUR@@@");
+    return erreur;
+}

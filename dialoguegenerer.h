@@ -40,7 +40,7 @@ class DialogueGenerer : public QWidget
 
     QLineEdit *nomPopulation;
     QSpinBox *taillePopulation;
-    QSlider *populationSimulee;
+    QSpinBox *populationSimulee;
     QLabel *labelPopulationSimulee;
     QLabel *avertissementTaillePopulation1;
     QLabel *avertissementTaillePopulation2;

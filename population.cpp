@@ -176,7 +176,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
                 *nomDossier = "DePopulo - " + *nomPopulation + " (" + i + ")" + "/";
 
             if (i >= 1000 && emplacementExisteDeja == false)
-                throw QString ("Erreur 1 : le dossier " + *nomDossier + " existe déjà. Veuillez le renommer, le déplacer ou le supprimer avant de réessayer.");
+                throw QString ("Erreur 1 : le dossier " + *nomDossier + " existe déjà. Veuillez le renommer, le déplacer ou le supprimer avant de réessayer.\nSi vous n'êtes pas un petit malin qui a fait exprès de provoquer cette erreur, c'est qu'il y a un bug à signaler à l'administrateur.");
         }
 
         //On crée le dossier dans lequel seront contenus les fichiers relatifs à la population.
@@ -234,12 +234,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
 
         if (paquetOpinions != "%%NULL%%")
         {
-            QFile paqOpinions;
-            paqOpinions.setFileName(paquetOpinions);
-            if (!paqOpinions.open(QIODevice::WriteOnly | QIODevice::Text))
-                throw QString("Impossible d'ouvrir le fichier " + paqOpinions.fileName());
-
-            paqOpinions.copy(*emplacementFichiers + "/" + *nomPopulation + ".populopack");
+            QFile::copy(paquetOpinions, *emplacementFichiers + "/" + *nomPopulation + ".populopack");
         }
 
         else
@@ -275,12 +270,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
 
         if (paquetProprietes != "%%NULL%%")
         {
-            QFile paqProprietes;
-            paqProprietes.setFileName(paquetOpinions);
-            if (!paqProprietes.open(QIODevice::WriteOnly | QIODevice::Text))
-                throw QString("Impossible d'ouvrir le fichier " + paqProprietes.fileName());
-
-            paqProprietes.copy(*emplacementFichiers + "/" + *nomPopulation + ".populopropripack");
+            QFile::copy(paquetProprietes, *emplacementFichiers + "/" + *nomPopulation + ".populopropripack");
         }
 
         else
@@ -321,7 +311,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
             QDir dossierOpinionsBase = fichierOpinionsBase.dir();
             QString emplacementOpinionsBase = dossierOpinionsBase.absolutePath();
 
-            QVector<QString> opinions = lireFichier(fenetreParente, fichierOpinionsBase.fileName());
+            QVector<QString> opinions = lireFichier(fenetreParente, fichierOpinionsBase.filePath());
 
             for (int i = 0; i < opinions.size(); i++)
             {
@@ -340,7 +330,7 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
             QDir dossierProprietesBase = fichierProprietesBase.dir();
             QString emplacementProprietesBase = dossierProprietesBase.absolutePath();
 
-            QVector<QString> proprietes = lireFichier(fenetreParente, fichierProprietesBase.fileName());
+            QVector<QString> proprietes = lireFichier(fenetreParente, fichierProprietesBase.filePath());
 
             for (int i = 0; i < proprietes.size(); i++)
             {
@@ -397,8 +387,10 @@ Population::Population(QWidget *fenetreParente, const QString &p_nomPopulation, 
          * [FAIT] Un fichier "population.populopropripack", recensant toutes les propriétés des individus
          * [FAIT] Un fichier "propriété.populopropri" (remplacer "propriété" par la propriété en question) pour chaque propriété des citoyens : âge, genre, activité, etc., contenant l'ensemble des solutions qu'il peut y avoir (1 an, 2 ans, 3 ans ... 150 ans ; femme, homme ; agriculteur, infirmier, demandeur d'emploi, retraité, étudiant, etc.).
          *
-         * Remplacer les "throw bool"/"throw QString" par quelque chose d'un peu plus ... utile, rigoureux et facile à consulter
+         * Remplacer les "throw bool"/"throw QString" par quelque chose d'un peu plus utile, rigoureux et facile à consulter
          * Ajouter une barre de progression lors de la création d'une population (QProgressBar/QProgressDialog)
+         *
+         * /!\ La copie d'un fichier d'opinions (populopack) ou de propriétés (populopropripack) ne se fait pas correctement. Cf. population "Ah ! Greetings, commander !"
          */
     }
     catch (const QString &erreur)

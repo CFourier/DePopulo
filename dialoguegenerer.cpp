@@ -18,12 +18,11 @@ DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
     taillePopulation = new QSpinBox;
     taillePopulation->setMaximum(1000000000);
     taillePopulation->setSingleStep(1000000);
-    populationSimulee = new QSlider;
-    populationSimulee->setOrientation(Qt::Horizontal);
+    populationSimulee = new QSpinBox;
     populationSimulee->setMinimum(0);
     populationSimulee->setMaximum(taillePopulation->value()); //Un slot qui fait changer le label ci-dessous lorsque la valeur de ce QSlider est modifiée
     labelPopulationSimulee = new QLabel();
-    labelPopulationSimulee->setText("0 (0 %)");
+    labelPopulationSimulee->setText("(0 %)");
     avertissementTaillePopulation1 = new QLabel;
     avertissementTaillePopulation2 = new QLabel;
     avertissementTaillePopulation3 = new QLabel;
@@ -84,7 +83,7 @@ DialogueGenerer::DialogueGenerer(FenetrePrincipale *parent)
     QObject::connect(paquetProprietes, SIGNAL(clicked()), this, SLOT(choisirPaquetProprietes()));
     QObject::connect(parcourirCheminFichiersPopulation, SIGNAL(clicked()), this, SLOT(choisirEmplacementFichiers()));
     QObject::connect(boutonOK, SIGNAL(clicked()), this, SLOT(creerPopulation()));
-    QObject::connect(populationSimulee, SIGNAL(sliderMoved(int)), this, SLOT(synchroniserPopulationSimulee(int)));
+    QObject::connect(populationSimulee, SIGNAL(valueChanged(int)), this, SLOT(synchroniserPopulationSimulee(int)));
     QObject::connect(taillePopulation, SIGNAL(valueChanged(int)), this, SLOT(synchroniserMaxSlider(int)));
 }
 
@@ -93,7 +92,10 @@ void DialogueGenerer::choisirPaquetOpinions()
     *paquetOpinionsChoisi = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Paquet d'opinions (*.populopack)");
 
     if (*paquetOpinionsChoisi != "" && *paquetOpinionsChoisi != "NULL")
-        paquetOpinions->setText("Paquet d'opinions de départ : " + *paquetOpinionsChoisi);
+    {
+        QFileInfo opin(*paquetOpinionsChoisi);
+        paquetOpinions->setText("Paquet d'opinions de départ : " + opin.fileName());
+    }
 }
 
 void DialogueGenerer::choisirPaquetProprietes()
@@ -101,7 +103,10 @@ void DialogueGenerer::choisirPaquetProprietes()
     *paquetProprietesChoisi = QFileDialog::getOpenFileName(this, "Ouvrir", QString(), "Paquet de propriétés (*.populopropripack)");
 
     if (*paquetProprietesChoisi != "" && *paquetProprietesChoisi != "NULL")
-        paquetOpinions->setText("Paquet de propriétés de départ : " + *paquetProprietesChoisi);
+    {
+        QFileInfo prop(*paquetProprietesChoisi);
+        paquetProprietes->setText("Paquet de propriétés de départ : " + prop.fileName());
+    }
 }
 
 
@@ -155,12 +160,11 @@ void DialogueGenerer::creerPopulation()
 void DialogueGenerer::synchroniserPopulationSimulee(int p_citoyensSimules)
 {
     double pourcentsDouble = (double)p_citoyensSimules / taillePopulation->value();
-    int pourcents = pourcentsDouble * 100;
+    int pourcentMille = pourcentsDouble * 100000;
 
-    QString texte = QVariant(p_citoyensSimules).toString();
-    texte += " citoyens (";
-    texte += QVariant(pourcents).toString();
-    texte += " %)";
+    QString texte = "(";
+    texte += QVariant(pourcentMille).toString();
+    texte += " simulés pour 100 000 citoyens)";
     labelPopulationSimulee->setText(texte);
 }
 
